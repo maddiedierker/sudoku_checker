@@ -1,15 +1,17 @@
 require './sudoku_board_builder'
 require './sudoku_logic'
 
-sudoku_board_to_check = ARGF.readlines
+board_to_check = ARGF.readlines
 
-sudoku_board = BoardBuilder.build_sudoku_board(sudoku_board_to_check)
+# changes argument file to array--each index is a row of the sudoku board
+sudoku_board = BoardBuilder.build_board(board_to_check)
 
+# create new board object to perform logic to determine if solved correctly
 submitted_sudoku_board = SudokuLogic.new(sudoku_board)
 
-checked_sudoku_board = submitted_sudoku_board.board_is_correct?()
-	if checked_sudoku_board == false
-		puts "Your sudoku has not been solved!"
-	else
-		puts "You solved the sudoku!"
-	end
+# output to user if board is correct/incorrect horizontally, vertically, and across 3x3 squares 
+if !submitted_sudoku_board.board_is_correct?()
+    puts "Your sudoku has not been solved!"
+else
+    puts "You solved the sudoku!"
+end

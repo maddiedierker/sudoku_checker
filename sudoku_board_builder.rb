@@ -1,5 +1,6 @@
+# takes .txt file and splits at each \n to create rows of sudoku board in an array
 class BoardBuilder
-	def self.build_sudoku_board(board_to_check)
+	def self.build_board(board_to_check)
 		row_index = 0
 		rows = []
 		until row_index == 9

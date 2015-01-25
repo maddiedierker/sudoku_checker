@@ -5,14 +5,14 @@ class SudokuLogic
 		@sudoku_board = sudoku_board
 	end
 	
+    # return boolean to determine whether or not board is correct horizontally, vertically, and on 3x3 squares
 	def board_is_correct?()
-		if !(row_checker() && column_checker() && square_checker)
-			return false
-		end
-		true	
+		_row_checker() && _column_checker() && _square_checker
 	end
 	
-	def board_logic_checker(arrays_to_check)
+    private
+    # checks two-dimensional array to determine if all rows/columns/squares contain values 1-9
+	def _board_logic_checker(arrays_to_check)
 		arrays_to_check.each do |sub_array|
 			if !sub_array.sort.eql?([1,2,3,4,5,6,7,8,9])
 				return false
@@ -20,13 +20,32 @@ class SudokuLogic
 		end
 		true
 	end
+    
+    # checkers get 2D arrays of rows, columns, and squares then performs logic to check if solved correctly
+    def _row_checker()
+        array_of_rows = _get_board_rows()
+        _board_logic_checker(array_of_rows)
+    end
+    
+    def _column_checker()
+        array_of_columns = _get_board_columns()
+        _board_logic_checker(array_of_columns)
+    end
+    
+    def _square_checker()
+        square_starting_points = _get_square_starting_points()
+        array_of_squares = _get_board_squares(square_starting_points)
+        _board_logic_checker(array_of_squares)
+    end
 	
-	def get_board_rows(sudoku_board)
+    # create 2D array of all rows on the board
+	def _get_board_rows()
 		array_of_rows = []
 		sudoku_board.each { |row| array_of_rows << row }
 	end
 	
-	def get_board_columns(sudoku_board)
+    # create 2D array of all columns on the board
+	def _get_board_columns()
 		column_index = 0
 		array_of_columns = []
 		until column_index == 9
@@ -40,7 +59,8 @@ class SudokuLogic
 		array_of_columns.each_slice(9).to_a
 	end
 	
-	def get_square_starting_points(sudoku_board)
+    # find starting point of each 3x3 square
+	def _get_square_starting_points()
 		square_starting_points = []
 		row_index = 0
 		column_index = 0
@@ -55,7 +75,9 @@ class SudokuLogic
 		square_starting_points
 	end
 	
-	def get_board_squares(sudoku_board, square_starting_points)
+    # iterate 3x horizontally and 3x vertically to create 3x3 square using the starting point
+    # create 2D array of all squares on the board
+	def _get_board_squares(square_starting_points)
 		array_of_squares = []
 		square_starting_points.each do |starting_point|
 			row_index = starting_point[0]
@@ -70,21 +92,5 @@ class SudokuLogic
 			end	
 		end
 		array_of_squares.each_slice(9).to_a
-	end
-	
-	def row_checker()
-		array_of_rows = get_board_rows(sudoku_board)
-		board_logic_checker(array_of_rows)
-	end
-	
-	def column_checker()
-		array_of_columns = get_board_columns(sudoku_board)
-		board_logic_checker(array_of_columns)
-	end
-	
-	def square_checker()
-		square_starting_points = get_square_starting_points(sudoku_board)
-		array_of_squares = get_board_squares(sudoku_board, square_starting_points)
-		board_logic_checker(array_of_squares)
 	end
 end
